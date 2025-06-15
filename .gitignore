@@ -1,26 +1,10 @@
-# Node.js 関連
-# Node.jsのモジュールがインストールされるディレクトリ
 # npm installを実行すると生成される
 backend/node_modules/
-npm-debug.log*
-.npm/
 
 # 環境変数ファイル
-# 機密情報が含まれるため、絶対にGitにコミットしない
+# 機密情報が含まれるため、Gitにコミットしない。
 backend/.env
-.env.local
-.env.*.local
 
-# ログファイル
-*.log
-logs/
-*.log.*
-
-# OS固有のファイル (macOS)
-.DS_Store
-
-# IDEs / エディタ関連
-.vscode/
-.idea/
-*.swp
-*.swo
+# Google Cloud VM へのアップロード用（本番サーバー用）のsystemdサービスファイルは機密情報を含むため、Gitにコミットしない。
+# contact-form.service.example をサンプルとして参照お願いいたします。
+contact-form.service

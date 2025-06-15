@@ -1,3 +1,5 @@
+-- Google Cloud VM へアップロード
+
 CREATE TABLE IF NOT EXISTS inquiries (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
