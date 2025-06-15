@@ -40,13 +40,10 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    display: flex; /* For centering content */
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
     margin: 0;
-    padding: 80px 20px; /* Adjust padding for responsiveness */
+    padding: 20px;
     box-sizing: border-box;
+    min-height: 100vh;
   }
   
   * {

@@ -1,5 +1,5 @@
 {
-    "name": "contact-form-backend",
+    "name": "public-form-backend",
     "version": "1.0.0",
     "description": "Backend for contact form using Node.js HTTP module and PostgreSQL",
     "main": "server.js",

@@ -103,9 +103,18 @@ const validateInquiryData = (data) => {
 
 // HTTPサーバーの作成
 const server = http.createServer(async (req, res) => {
-    // CORSヘッダーの設定 (開発中は許可、本番では特定のオリジンのみ許可する)
-    // Nginxがリバースプロキシとして機能する場合、Nginx側でCORSヘッダーを設定することも可能
-    res.setHeader('Access-Control-Allow-Origin', process.env.NODE_ENV === 'production' ? 'https://cypass.net' : '*');
+    // CORSヘッダーの設定を改善
+    const allowedOrigins = [
+        'http://localhost:8080',
+        'http://127.0.0.1:8080',
+        'https://cypass.net'
+    ];
+    
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS, GET');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-CSRF-Token');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -211,10 +220,33 @@ ${message}
         });
     } else if (req.url === '/api/csrf-token' && req.method === 'GET') {
         // CSRFトークンを返すエンドポイント
+        console.log('CSRF token requested. Current token:', csrfToken);
+        if (!csrfToken) {
+            csrfToken = generateCsrfToken();
+            console.log('Generated new CSRF token:', csrfToken);
+        }
         sendSuccess(res, 200, { csrfToken: csrfToken });
-    }
-    else {
+    } else if (req.url === '/api/admin/inquiries' && req.method === 'GET') {
+        // 管理者用の問い合わせ一覧取得エンドポイント
+        try {
+            const client = await pool.connect();
+            try {
+                const result = await client.query(`
+                    SELECT id, name, email, service, category, plans, message, created_at
+                    FROM inquiries
+                    ORDER BY created_at DESC
+                `);
+                sendSuccess(res, 200, { inquiries: result.rows });
+            } finally {
+                client.release();
+            }
+        } catch (error) {
+            console.error('Error fetching inquiries:', error);
+            sendError(res, 500, '問い合わせデータの取得に失敗しました');
+        }
+    } else {
         // 未定義のルート
+        console.log('404 Not Found:', req.url);
         sendError(res, 404, 'Not Found');
     }
 });

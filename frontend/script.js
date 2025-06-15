@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 開発環境の判定（localhostの場合のみ）
-    const isDevelopment = window.location.hostname === 'localhost';
+    // 開発環境の判定を改善
+    const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const API_BASE_URL = isDevelopment ? 'http://localhost:3000' : '';
 
     // DOM要素の取得
     const formGlobalMessage = document.getElementById('form-global-message');
@@ -33,6 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     let csrfToken = null;
 
+    // フォームの初期化状態
+    let isFormInitialized = false;
+
     // サービスごとの選択肢の定義（旧 components/ContactForm.tsx から移行）
     const SERVICE_OPTIONS = {
         'サービスA': {
@@ -54,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 送信ボタンの状態を更新する関数
     const updateSubmitButtonState = (submitting) => {
+        console.log('Updating submit button state:', submitting);
         isSubmitting = submitting;
         submitButton.disabled = submitting;
         backButton.disabled = submitting;
@@ -63,13 +68,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const buttonText = buttonContent.querySelector('span');
 
         if (submitting) {
+            console.log('Showing loading spinner');
             loadingSpinner.classList.remove('hidden');
             buttonText.textContent = '送信中...';
         } else {
+            console.log('Hiding loading spinner');
             loadingSpinner.classList.add('hidden');
             buttonText.textContent = '送信する';
         }
     };
+
+    // 初期化時にローディングスピナーを非表示に設定
+    const loadingSpinner = submitButton.querySelector('.loading-spinner');
+    if (loadingSpinner) {
+        loadingSpinner.classList.add('hidden');
+    }
 
     // --- ヘルパー関数 ---
 
@@ -89,7 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const errorField = document.querySelector(`.error-message-field[data-field="${fieldName}"]`);
         if (errorField) {
             errorField.textContent = message;
-            errorField.classList.add('visible');
+            errorField.classList.add('visible', 'error-animation');
+            setTimeout(() => {
+                errorField.classList.remove('error-animation');
+            }, 500);
         }
     };
 
@@ -106,19 +122,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // CSRFトークンをサーバーから取得
     const fetchCsrfToken = async () => {
         try {
-            const response = await fetch('/api/csrf-token'); // バックエンドのCSRFトークンエンドポイント
+            console.log('Fetching CSRF token from:', `${API_BASE_URL}/api/csrf-token`);
+            const response = await fetch(`${API_BASE_URL}/api/csrf-token`);
+            console.log('CSRF token response status:', response.status);
+            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+            
             const data = await response.json();
+            console.log('CSRF token response data:', data);
+            
+            if (!data.csrfToken) {
+                throw new Error('CSRF token not found in response');
+            }
+            
             csrfToken = data.csrfToken;
-            console.log('CSRF Token fetched:', csrfToken);
+            console.log('CSRF Token fetched successfully:', csrfToken);
+            
+            // トークン取得成功時にフォームを初期化
+            isFormInitialized = true;
+            confirmButton.disabled = false;
+            submitButton.disabled = false;
         } catch (error) {
             console.error('Error fetching CSRF token:', error);
-            displayGlobalMessage('CSRFトークンの取得に失敗しました。ページを再読み込みしてください。', 'error', false);
-            // エラー時は送信ボタンを無効化するなど、UIでユーザーに伝える
+            displayGlobalMessage('セキュリティチェックに失敗しました。ページを再読み込みしてください。', 'error', false);
             confirmButton.disabled = true;
             submitButton.disabled = true;
+            isFormInitialized = false;
         }
     };
 
@@ -336,6 +367,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 確認画面へ進むボタン
     confirmButton.addEventListener('click', () => {
+        if (!isFormInitialized) {
+            displayGlobalMessage('フォームの初期化に失敗しています。ページを再読み込みしてください。', 'error', false);
+            return;
+        }
         // 現在のフォームデータを収集
         formData = {
             name: nameInput.value.trim(),
@@ -357,71 +392,100 @@ document.addEventListener('DOMContentLoaded', () => {
         updateFormUI(); // 入力画面に戻った際に現在のフォームデータをUIに反映
     });
 
-    // 送信するボタン (確認画面から)
+    // 送信ボタンのイベントリスナー
     submitButton.addEventListener('click', async () => {
-        if (isSubmitting) return; // 送信中は処理をスキップ
-
-        // 開発環境の場合は送信処理をスキップ
-        if (isDevelopment) {
-            updateSubmitButtonState(true);
-            // 送信中の演出を少し表示
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            updateSubmitButtonState(false);
-            showStep('complete');
+        if (!isFormInitialized) {
+            displayGlobalMessage('フォームの初期化に失敗しています。ページを再読み込みしてください。', 'error', false);
             return;
         }
-
-        // 本番環境の場合は通常の送信処理を実行
+        console.log('Submit button clicked');
+        console.log('Current form data:', formData);
+        console.log('Current CSRF token:', csrfToken);
+        
         if (!csrfToken) {
-            displayGlobalMessage('CSRFトークンが取得できていません。ページを再読み込みしてください。', 'error', false);
+            console.error('No CSRF token available');
+            displayGlobalMessage('セキュリティチェックに失敗しました。ページを再読み込みしてください。', 'error', false);
             return;
         }
 
-        updateSubmitButtonState(true);
+        await submitForm();
+    });
 
+    // フォーム送信処理
+    const submitForm = async () => {
+        console.log('Starting form submission');
+        if (isSubmitting) {
+            console.log('Already submitting, skipping');
+            return;
+        }
+        
         try {
-            const response = await fetch('/api/contact', {
+            console.log('Updating submit button state to submitting');
+            updateSubmitButtonState(true);
+
+            console.log('Sending request to:', `${API_BASE_URL}/api/contact`);
+            const response = await fetch(`${API_BASE_URL}/api/contact`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-Token': csrfToken // CSRFトークンをヘッダーに含める
+                    'X-CSRF-Token': csrfToken
                 },
                 body: JSON.stringify(formData)
             });
 
-            const result = await response.json();
+            console.log('Response status:', response.status);
+            const data = await response.json();
+            console.log('Response data:', data);
 
-            if (response.ok) {
-                showStep('complete');
-                // 成功したら新しいCSRFトークンを取得し直す
-                await fetchCsrfToken();
-            } else {
-                displayGlobalMessage(result.message || 'お問い合わせの送信中にエラーが発生しました。', 'error', false);
-                showStep('form'); // エラー時は入力画面に戻す
+            if (!response.ok) {
+                throw new Error(data.message || '送信に失敗しました');
             }
+
+            // 成功時の処理
+            displayGlobalMessage('送信が完了しました！', 'success', false);
+            showStep('complete');
+            
+            // フォームデータのリセット
+            formData = {
+                name: '',
+                email: '',
+                service: '',
+                category: '',
+                plans: [],
+                message: ''
+            };
+            updateFormUI();
+
         } catch (error) {
-            console.error('Fetch error:', error);
-            displayGlobalMessage('ネットワークエラーが発生しました。インターネット接続を確認してください。', 'error', false);
-            showStep('form'); // エラー時は入力画面に戻す
+            console.error('Form submission error:', error);
+            displayGlobalMessage(error.message || '送信に失敗しました。もう一度お試しください。', 'error', false);
+            showStep('form');
         } finally {
+            console.log('Resetting submit button state');
             updateSubmitButtonState(false);
         }
-    });
+    };
 
-    // 入力画面に戻るボタン (完了画面から)
-    returnToFormButton.addEventListener('click', () => {
-        formData = { // フォームデータをリセット
-            name: '', email: '', service: '', category: '', plans: [], message: ''
+    // フォームのリセット
+    const resetForm = () => {
+        formData = {
+            name: '',
+            email: '',
+            service: '',
+            category: '',
+            plans: [],
+            message: ''
         };
+        updateFormUI();
+        clearAllErrors();
         showStep('form');
-        updateFormUI(); // リセットされたフォームデータをUIに反映
-    });
+    };
 
-    // 初期化処理: ページロード時に実行
-    // 開発環境の場合はCSRFトークンの取得をスキップ
-    if (!isDevelopment) {
-        fetchCsrfToken(); // 本番環境ではCSRFトークンを取得
-    }
+    // 完了画面からフォームに戻るボタンのイベントリスナー
+    returnToFormButton.addEventListener('click', resetForm);
+
+    // 初期化時にCSRFトークンを取得
+    fetchCsrfToken();
     updateFormUI(); // 初期データに基づいてUIを更新
     showStep('form'); // 最初のステップを表示
 

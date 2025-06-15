@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問い合わせ管理画面</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .inquiry-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .inquiry-list th,
+        .inquiry-list td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .inquiry-list th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .inquiry-list tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .message-cell {
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .timestamp {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .error {
+            color: #dc3545;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>問い合わせ一覧</h1>
+        <div id="error-message" class="error" style="display: none;"></div>
+        <div id="loading" class="loading">読み込み中...</div>
+        <div id="no-data" class="no-data" style="display: none;">問い合わせデータがありません</div>
+        <table class="inquiry-list">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>氏名</th>
+                    <th>メールアドレス</th>
+                    <th>サービス</th>
+                    <th>カテゴリー</th>
+                    <th>プラン</th>
+                    <th>お問い合わせ内容</th>
+                    <th>受付日時</th>
+                </tr>
+            </thead>
+            <tbody id="inquiry-list-body">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const API_BASE_URL = isDevelopment ? 'http://localhost:3000' : '';
+
+            const loadingElement = document.getElementById('loading');
+            const errorElement = document.getElementById('error-message');
+            const noDataElement = document.getElementById('no-data');
+            const inquiryListBody = document.getElementById('inquiry-list-body');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/admin/inquiries`);
+                if (!response.ok) {
+                    throw new Error('問い合わせデータの取得に失敗しました');
+                }
+
+                const data = await response.json();
+                
+                if (!data.inquiries || data.inquiries.length === 0) {
+                    loadingElement.style.display = 'none';
+                    noDataElement.style.display = 'block';
+                    return;
+                }
+
+                // データを日時で降順にソート
+                data.inquiries.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+                // テーブルにデータを表示
+                data.inquiries.forEach(inquiry => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${inquiry.id}</td>
+                        <td>${escapeHtml(inquiry.name)}</td>
+                        <td>${escapeHtml(inquiry.email)}</td>
+                        <td>${escapeHtml(inquiry.service)}</td>
+                        <td>${escapeHtml(inquiry.category)}</td>
+                        <td>${(() => { try { return inquiry.plans ? JSON.parse(inquiry.plans).join('・') : ''; } catch (e) { return inquiry.plans || ''; } })()}</td>
+                        <td class="message-cell" title="${escapeHtml(inquiry.message)}">${escapeHtml(inquiry.message)}</td>
+                        <td class="timestamp">${formatDate(inquiry.created_at)}</td>
+                    `;
+                    inquiryListBody.appendChild(row);
+                });
+
+                loadingElement.style.display = 'none';
+            } catch (error) {
+                console.error('Error fetching inquiries:', error);
+                loadingElement.style.display = 'none';
+                errorElement.textContent = error.message;
+                errorElement.style.display = 'block';
+            }
+        });
+
+        // HTMLエスケープ関数
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // 日時フォーマット関数
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('ja-JP', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+    </script>
+</body>
+</html> 
