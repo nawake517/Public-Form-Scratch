@@ -1,10 +1,12 @@
-# npm installを実行すると生成される
+# npm installを実行すると生成される。
 backend/node_modules/
 
 # 環境変数ファイル
 # 機密情報が含まれるため、Gitにコミットしない。
+# .env.example をサンプルとして参照お願いいたします。
 backend/.env
 
-# Google Cloud VM へのアップロード用（本番サーバー用）のsystemdサービスファイルは機密情報を含むため、Gitにコミットしない。
+# Google Cloud VM へのアップロード用（本番サーバー用）。
+#機密情報を含むため、Gitにコミットしない。
 # contact-form.service.example をサンプルとして参照お願いいたします。
 contact-form.service
