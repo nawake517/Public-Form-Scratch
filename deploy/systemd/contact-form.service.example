@@ -5,17 +5,17 @@ Description=Public Form Backend Application
 After=network.target postgresql.service
 
 [Service]
-# シークレットキーを環境変数として設定
-# 実際の値はここに記述します。GitHubにはアップロードしません。
-Environment="NODE_ENV=production"
-Environment="DB_HOST=your_db_host_ip" 
-Environment="DB_PORT=5432"
-Environment="DB_USER=public"
-Environment="DB_PASSWORD=your_actual_secure_db_password" # ここに実際のパスワードを記述！
-Environment="DB_NAME=public"
-Environment="GMAIL_USER=your_production_gmail_address@gmail.com" # 本番環境のGmailアドレス
-Environment="GMAIL_APP_PASSWORD=your_production_gmail_app_password" # 本番環境のGmailアプリパスワード
-Environment="PORT=3000"
+# シークレットキーを環境変数として設定。
+# 実物はgithubへアップロードなし。
+Environment="NODE_ENV=example"
+Environment="DB_HOST=example" 
+Environment="DB_PORT=example"
+Environment="DB_USER=example"
+Environment="example"
+Environment="DB_NAME=example"
+Environment="example@gmail.com"
+Environment="GMAIL_APP_PASSWORD=example"
+Environment="PORT=example"
 
 WorkingDirectory=/var/www/html/public-form-scratch/backend
 ExecStart=/usr/bin/node server.js

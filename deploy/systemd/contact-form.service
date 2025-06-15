@@ -6,15 +6,15 @@ After=network.target postgresql.service
 
 [Service]
 # シークレットキーを環境変数として設定
-# 実際の値はここに記述します。GitHubにはアップロードしません。
+# 実物はgithubへアップロードなし。
 Environment="NODE_ENV=production"
-Environment="DB_HOST=your_db_host_ip" 
+Environment="DB_HOST=localhost" 
 Environment="DB_PORT=5432"
-Environment="DB_USER=public"
-Environment="DB_PASSWORD=your_actual_secure_db_password" # ここに実際のパスワードを記述！
-Environment="DB_NAME=public"
-Environment="GMAIL_USER=your_production_gmail_address@gmail.com" # 本番環境のGmailアドレス
-Environment="GMAIL_APP_PASSWORD=your_production_gmail_app_password" # 本番環境のGmailアプリパスワード
+Environment="DB_USER=matsunaganaoki"
+Environment="DB_PASSWORD=t69s5rdrvpus"
+Environment="DB_NAME=public_form"
+Environment="GMAIL_USER=naoki130517@gmail.com" # 本番環境のGmailアドレス
+Environment="GMAIL_APP_PASSWORD=jjfu ljfy wrrw zegv"
 Environment="PORT=3000"
 
 WorkingDirectory=/var/www/html/public-form-scratch/backend
