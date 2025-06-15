@@ -1,0 +1,31 @@
+# contact-form-app/deploy/systemd/contact-form.service
+
+[Unit]
+Description=Contact Form Backend Application
+After=network.target postgresql.service
+
+[Service]
+# シークレットキーを環境変数として設定
+# 実際の値はここに記述します。GitHubにはアップロードしません。
+Environment="NODE_ENV=production"
+Environment="DB_HOST=your_db_host_ip" 
+Environment="DB_PORT=5432"
+Environment="DB_USER=contact_user"
+Environment="DB_PASSWORD=your_actual_secure_db_password" # ここに実際のパスワードを記述！
+Environment="DB_NAME=contact_db"
+Environment="GMAIL_USER=your_production_gmail_address@gmail.com" # 本番環境のGmailアドレス
+Environment="GMAIL_APP_PASSWORD=your_production_gmail_app_password" # 本番環境のGmailアプリパスワード
+Environment="PORT=3000"
+
+WorkingDirectory=/var/www/html/contact-form-scratch/backend
+ExecStart=/usr/bin/node server.js
+Restart=always
+User=www-data
+Group=www-data
+
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=contact-form-backend
+
+[Install]
+WantedBy=multi-user.target

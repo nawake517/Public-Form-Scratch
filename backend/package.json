@@ -1,0 +1,17 @@
+{
+    "name": "contact-form-backend",
+    "version": "1.0.0",
+    "description": "Backend for contact form using Node.js HTTP module and PostgreSQL",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "dotenv": "^16.4.5",  
+      "pg": "^8.11.3",
+      "nodemailer": "^6.9.13" 
+    }
+  }

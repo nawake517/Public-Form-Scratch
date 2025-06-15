@@ -1,0 +1,26 @@
+# Node.js 関連
+# Node.jsのモジュールがインストールされるディレクトリ
+# npm installを実行すると生成される
+backend/node_modules/
+npm-debug.log*
+.npm/
+
+# 環境変数ファイル
+# 機密情報が含まれるため、絶対にGitにコミットしない
+backend/.env
+.env.local
+.env.*.local
+
+# ログファイル
+*.log
+logs/
+*.log.*
+
+# OS固有のファイル (macOS)
+.DS_Store
+
+# IDEs / エディタ関連
+.vscode/
+.idea/
+*.swp
+*.swo
