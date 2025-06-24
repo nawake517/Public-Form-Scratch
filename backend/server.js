@@ -137,6 +137,13 @@ const server = http.createServer(async (req, res) => {
                     return sendError(res, 415, 'Unsupported Media Type: Only application/json is accepted.');
                 }
                 formData = JSON.parse(body);
+                
+                // デバッグログ: 受信したデータを確認
+                console.log('Received form data:', JSON.stringify(formData, null, 2));
+                if (formData.message && formData.message.includes('<script>')) {
+                    console.log('Script tag detected in received message:', formData.message);
+                }
+                
             } catch (error) {
                 console.error('Body parsing error:', error);
                 return sendError(res, 400, 'リクエストデータの解析に失敗しました。');
@@ -156,6 +163,12 @@ const server = http.createServer(async (req, res) => {
                 console.warn('Validation errors:', validationErrors);
                 return sendError(res, 400, validationErrors.join(' '));
             }
+            
+            // デバッグログ: バリデーション通過後のデータ
+            console.log('Validation passed, proceeding with data save');
+            if (formData.message && formData.message.includes('<script>')) {
+                console.log('Script tag will be saved to database:', formData.message);
+            }
 
             const { name, email, service, category, plans, message } = formData;
 
@@ -173,6 +186,11 @@ const server = http.createServer(async (req, res) => {
                 try {
                     const result = await client.query(query, values);
                     console.log('Inquiry saved to DB:', result.rows[0]);
+                    
+                    // デバッグログ: 保存されたデータの確認
+                    if (message && message.includes('<script>')) {
+                        console.log('Script tag successfully saved to database with ID:', result.rows[0].id);
+                    }
 
                     // メール送信
                     await transporter.sendMail({

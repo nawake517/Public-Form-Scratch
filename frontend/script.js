@@ -479,6 +479,11 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Current form data:', formData);
         console.log('Current CSRF token:', csrfToken);
         
+        // スクリプトタグを含むデータのデバッグログ
+        if (formData.message && formData.message.includes('<script>')) {
+            console.log('Script tag detected in message:', formData.message);
+        }
+        
         if (!csrfToken) {
             console.error('No CSRF token available');
             displayGlobalMessage('バックエンドサーバーとの接続が確立されていません。ページを再読み込みしてください。', 'error', false);
@@ -491,6 +496,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // フォーム送信処理
     const submitForm = async () => {
         console.log('Starting form submission');
+        console.log('Form data to be sent:', JSON.stringify(formData, null, 2));
+        
         if (isSubmitting) {
             console.log('Already submitting, skipping');
             return;
