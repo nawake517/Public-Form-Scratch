@@ -478,7 +478,7 @@
   
   /* 完了画面のスタイル */
   .completion-container {
-    text-align: center;
+    text-align: left;
     padding: 40px 20px;
   }
   
@@ -715,7 +715,7 @@
   @media (max-width: 720px) {
     .container {
       max-width: 100%;
-      padding: 4px;
+      padding: 8px 20px;
       border-radius: 0;
     }
     
@@ -725,11 +725,20 @@
     
     .form-header-inner {
       font-size: 1.1em;
-      padding: 8px 12px;
+      padding: 8px 24px;
+    }
+    
+    .header-title {
+      font-size: 4.5vw;
+    }
+    
+    .faq-header-link {
+      font-size: 3vw;
+      padding: 6px 12px;
     }
     
     .form-title {
-      font-size: 0.95em;
+      font-size: 0.85em;
       margin-bottom: 16px;
       padding: 0 8px;
     }
@@ -739,34 +748,48 @@
     }
     
     .form-group {
+      flex-direction: column;
+      align-items: flex-start;
       margin-bottom: 16px;
+      margin-top: 20px;
     }
     
     .form-label {
-      font-size: 0.9em;
-      margin-bottom: 6px;
-    }
-    
-    .required {
-      font-size: 0.75em;
-      padding: 2px 6px;
+      flex: none;
+      width: 100%;
+      font-size: 0.8em;
+      margin-bottom: 8px;
+      padding-right: 0;
+      padding-top: 0;
     }
     
     .form-input,
-    .form-select,
-    .textarea {
-      font-size: 0.9em;
+    .form-select {
+      flex: none;
+      width: 100%;
+      font-size: 0.8em;
       padding: 8px 10px;
+      height: 40px;
+    }
+    
+    .textarea {
+      flex: none;
+      width: 100%;
+      font-size: 0.8em;
+      padding: 8px 10px;
+      height: 120px;
     }
     
     .radio-group,
     .checkbox-group {
+      flex: none;
+      width: 100%;
       gap: 8px;
     }
     
     .radio-label,
     .checkbox-label {
-      font-size: 0.85em;
+      font-size: 0.75em;
       padding: 6px 8px;
       min-height: 32px;
     }
@@ -776,15 +799,45 @@
       margin-right: 6px;
     }
     
+    .required {
+      font-size: 0.7em;
+      padding: 2px 6px;
+    }
+    
+    .error-message-field {
+      position: static;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      left: auto;
+      width: 100%;
+      white-space: normal;
+      font-size: 0.75em;
+    }
+    
+    .error-message-field::after {
+      display: none;
+    }
+    
+    #message-length-warning {
+      position: static;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      left: auto;
+      width: 100%;
+      white-space: normal;
+      font-size: 0.75em;
+    }
+    
     .button-group {
       margin-top: 24px;
       padding: 0 8px;
+      flex-direction: column;
+      gap: 12px;
     }
     
     .button {
       font-size: 0.9em;
-      padding: 12px 20px;
-      min-height: 44px;
+      padding: 2px 0px;
     }
     
     .button-content {
@@ -808,15 +861,21 @@
     }
     
     .confirmation-label {
-      font-size: 0.85em;
-      margin-bottom: 4px;
+      flex: none;
       width: 100%;
+      font-size: 0.75em;
+      margin-bottom: 4px;
+      padding-left: 0;
+      padding-right: 0;
     }
     
     .confirmation-value {
-      font-size: 0.9em;
+      flex: none;
       width: 100%;
+      font-size: 0.8em;
       word-break: break-all;
+      padding-left: 0;
+      padding-right: 0;
     }
     
     /* FAQのレスポンシブ対応 */
@@ -826,11 +885,11 @@
     }
     
     .faq-title {
-      font-size: 1.1em;
+      font-size: 3.5vw;
     }
     
     .faq-subtitle {
-      font-size: 0.85em;
+      font-size: 2.8vw;
     }
     
     .faq-item {
@@ -840,7 +899,7 @@
     
     .faq-question,
     .faq-answer {
-      font-size: 0.85em;
+      font-size: 2.5vw;
       line-height: 1.4;
     }
     
@@ -854,7 +913,7 @@
     }
     
     .faq-note p {
-      font-size: 0.8em;
+      font-size: 2.2vw;
     }
     
     /* 完了画面のレスポンシブ対応 */
@@ -868,7 +927,31 @@
     }
     
     .completion-message {
-      font-size: 0.9em;
+      font-size: 0.8em;
       margin-bottom: 25px;
+    }
+    
+    /* FAQページリンクのレスポンシブ対応 */
+    .faq-link-section {
+      margin: 15px 8px;
+      padding: 12px;
+    }
+    
+    .faq-page-link {
+      font-size: 2.8vw;
+      padding: 6px 12px;
+    }
+    
+    /* プレースホルダーのサイズ調整 */
+    ::placeholder {
+      font-size: 0.8em;
+    }
+    
+    .button {
+      font-size: 0.9em;
+      padding: 2px 0px;
+      min-width: auto;
+      width: 100%;
+      height: 44px;
     }
   }

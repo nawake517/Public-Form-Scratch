@@ -208,21 +208,36 @@ body {
 }
 
 /* レスポンシブ対応 */
-@media (max-width: 768px) {
+@media (max-width: 720px) {
+    .faq-header {
+        padding: 8px 0;
+    }
+    
     .faq-header-inner {
-        padding: 8px 12px;
+        margin: 0 auto;
+        padding: 8px 24px;
     }
     
     .faq-header h1 {
-        font-size: 1.1em;
+        font-size: 4.5vw;
     }
     
     .container {
-        padding: 15px;
+        padding: 8px 20px;
     }
     
     .search-section {
         flex-direction: column;
+    }
+    
+    .search-input {
+        font-size: 0.8em;
+        padding: 8px 12px;
+    }
+    
+    .search-button {
+        font-size: 0.8em;
+        padding: 8px 16px;
     }
     
     .category-filter {
@@ -230,50 +245,54 @@ body {
     }
     
     .category-btn {
-        font-size: 0.8em;
-        padding: 6px 12px;
-    }
-    
-    .faq-item {
-        padding: 20px;
-    }
-    
-    .faq-question {
-        font-size: 1em;
-    }
-    
-    .faq-meta {
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
-    }
-    
-    .faq-services {
-        flex-wrap: wrap;
-    }
-}
-
-@media (max-width: 480px) {
-    .faq-header-inner {
-        padding: 8px 12px;
-    }
-    
-    .container {
-        padding: 10px;
+        font-size: 0.7em;
+        padding: 4px 8px;
     }
     
     .faq-item {
         padding: 16px;
     }
     
-    .faq-question,
-    .faq-answer {
+    .faq-question {
+        font-size: 0.8em;
         gap: 8px;
     }
     
-    .faq-question-icon,
+    .faq-question-icon {
+        font-size: 0.9em;
+        min-width: 18px;
+    }
+    
+    .faq-answer {
+        font-size: 0.7em;
+        gap: 8px;
+    }
+    
     .faq-answer-icon {
-        min-width: 20px;
-        font-size: 1em;
+        font-size: 0.9em;
+        min-width: 18px;
+    }
+    
+    .faq-meta {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+        font-size: 0.7em;
+    }
+    
+    .faq-services {
+        flex-wrap: wrap;
+    }
+    
+    .service-tag {
+        font-size: 0.65em;
+    }
+    
+    .no-results {
+        font-size: 0.8em;
+    }
+    
+    .no-results p {
+        font-size: 0.8em;
     }
 } 
