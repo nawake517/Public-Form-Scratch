@@ -10,3 +10,6 @@ backend/.env
 #機密情報を含むため、Gitにコミットしない。
 # contact-form.service.example をサンプルとして参照お願いいたします。
 contact-form.service
+
+# macOSの不要ファイル
+.DS_Store

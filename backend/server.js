@@ -72,30 +72,25 @@ const validateInquiryData = (data) => {
     if (data.category && data.category.length > 255) errors.push('カテゴリーは255文字以下にしてください。');
     if (data.message && data.message.length > 2000) errors.push('お問い合わせ内容は2000文字以下にしてください。'); // TEXT型には通常上限はないが、不正なデータ防止のため
 
-    // プランは配列であることと、各要素が文字列であることを確認
-    if (data.plans && !Array.isArray(data.plans)) {
-        errors.push('プランの形式が不正です。');
-    } else if (data.plans && data.plans.some(p => typeof p !== 'string' || p.length > 255)) {
-        errors.push('プランの内容が不正です。');
-    }
-
-
-    // 不正なHTMLタグの除去またはエスケープ (XSS対策)
-    // 今回は簡易的にHTMLタグを許可しない方針（厳密にはもっと複雑な処理が必要）
-    for (const key of ['name', 'email', 'service', 'category', 'message']) {
-        if (data[key] && /[<>]/.test(data[key])) { // <や>が含まれていたらエラー
-             errors.push(`${key}に不正な文字が含まれています。`);
-        }
-    }
+    // --- XSS対策の二重防御について ---
+    // 下記のようにサーバー側でも<>が含まれていたらエラーにして保存しないことで、
+    // フロントエンドでのエスケープと合わせて多層防御を実現できると思いますが、
+    // 今回は<>を含む問い合わせ内容も有り得るため、コメントアウトします。
+    // 
+    // for (const key of ['name', 'email', 'service', 'category', 'message']) {
+    //     if (data[key] && /[<>]/.test(data[key])) { // <や>が含まれていたらエラー
+    //          errors.push(`${key}に不正な文字が含まれています。`);
+    //     }
+    // }
     // plans配列内の各要素もチェック
-    if (Array.isArray(data.plans)) {
-        for (const plan of data.plans) {
-            if (/[<>]/.test(plan)) {
-                errors.push('プランに不正な文字が含まれています。');
-                break;
-            }
-        }
-    }
+    // if (Array.isArray(data.plans)) {
+    //     for (const plan of data.plans) {
+    //         if (/[<>]/.test(plan)) {
+    //             errors.push('プランに不正な文字が含まれています。');
+    //             break;
+    //         }
+    //     }
+    // }
 
     return errors.length > 0 ? errors : null;
 };
