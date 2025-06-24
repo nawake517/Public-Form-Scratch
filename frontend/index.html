@@ -8,7 +8,12 @@
 </head>
 <body>
     <header class="form-header">
-        <div class="form-header-inner">お問い合わせフォーム</div>
+        <div class="form-header-inner">
+            <div class="header-title">お問い合わせフォーム</div>
+            <a href="./faq/" target="_blank" rel="noopener noreferrer" class="faq-header-link">
+                よくある質問
+            </a>
+        </div>
     </header>
     <main class="container">
         <div id="form-global-message" class="messages"></div>
@@ -111,6 +116,9 @@
                     <div class="confirmation-value" id="confirm-message" style="white-space: pre-wrap;"></div>
                 </div>
             </div>
+
+            <!-- 関連するFAQ表示エリア -->
+            <div id="related-faqs" class="related-faqs-container" style="display: none;"></div>
 
             <div class="button-group">
                 <button type="button" class="button button-secondary" id="backButton">

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>よくある質問 - FAQ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="faq-header">
+        <div class="faq-header-inner">
+            <h1>よくある質問</h1>
+        </div>
+    </header>
+    
+    <main class="container">
+        <div class="search-section">
+            <input type="text" id="search-input" class="search-input" placeholder="質問を検索...">
+            <button id="search-button" class="search-button">検索</button>
+        </div>
+
+        <div class="category-filter">
+            <button class="category-btn active" data-category="all">すべて</button>
+            <button class="category-btn" data-category="pricing">💰 料金・契約</button>
+            <button class="category-btn" data-category="service">⚙️ サービス内容・仕様</button>
+            <button class="category-btn" data-category="usage">🛠️ 利用方法・設定</button>
+            <button class="category-btn" data-category="support">📞 サポート・トラブル</button>
+            <button class="category-btn" data-category="business">🏢 法人・個人・用途</button>
+        </div>
+
+        <div id="faq-list" class="faq-list">
+            <!-- FAQ一覧がここに動的に表示されます -->
+        </div>
+
+        <div id="no-results" class="no-results" style="display: none;">
+            <p>検索条件に一致する質問が見つかりませんでした。</p>
+            <p>別のキーワードで検索するか、カテゴリーを変更してお試しください。</p>
+        </div>
+    </main>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html> 

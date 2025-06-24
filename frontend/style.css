@@ -478,27 +478,134 @@
   
   /* 完了画面のスタイル */
   .completion-container {
-    margin: 40px 0 50px;
+    text-align: center;
+    padding: 40px 20px;
   }
   
   .completion-title {
-    font-size: 1em;
-    font-weight: bold;
-    margin: 0 0 50px;
-    padding: 0;
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  
+  .completion-message {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 30px;
+  }
+  
+  /* 関連するFAQ表示 */
+  .related-faqs-container {
+    margin: 30px 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+  }
+  
+  .faq-section {
+    max-width: 100%;
+  }
+  
+  .faq-title {
+    color: #333;
+    font-size: 1.2em;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  
+  .faq-subtitle {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+  }
+  
+  .faq-list {
+    margin-bottom: 15px;
+  }
+  
+  .faq-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+  }
+  
+  .faq-question {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
     line-height: 1.4;
-    text-align: left;
-    color: #171717;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .faq-answer {
+    color: #555;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .faq-icon {
+    color: #007bff;
+    font-weight: bold;
+    margin-right: 8px;
+    min-width: 20px;
+  }
+  
+  .faq-note {
+    padding: 10px;
+    background-color: #e3f2fd;
+    border-radius: 4px;
+    border-left: 3px solid #2196f3;
+  }
+  
+  .faq-note p {
+    margin: 0;
+    font-size: 0.85em;
+    color: #1976d2;
+  }
+  
+  .faq-link {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+  }
+  
+  .faq-detail-link {
+    color: #667eea;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .faq-detail-link:hover {
+    text-decoration: underline;
+  }
+  
+  .faq-all-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .faq-all-link:hover {
+    text-decoration: underline;
   }
   
   /* Global messages area */
   .messages {
-      margin-top: 15px;
-      padding: 10px;
-      border-radius: 4px;
-      text-align: center;
-      font-weight: bold;
-      display: none; /* Hidden by default */
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      font-size: 0.9em;
+      display: none;
   }
   
   .messages.visible {
@@ -515,6 +622,34 @@
       background-color: #f8d7da;
       color: #721c24;
       border: 1px solid #f5c6cb;
+  }
+  
+  /* FAQページリンク */
+  .faq-link-section {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+  }
+  
+  .faq-page-link {
+      color: #667eea;
+      text-decoration: none;
+      font-size: 0.95em;
+      font-weight: 500;
+      padding: 8px 16px;
+      border: 2px solid #667eea;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      display: inline-block;
+  }
+  
+  .faq-page-link:hover {
+      background-color: #667eea;
+      color: white;
+      text-decoration: none;
   }
   
   .form-header {
@@ -534,9 +669,33 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 24px 2rem 24px 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header-title {
     font-size: 2.2rem;
     font-weight: bold;
     letter-spacing: 0.05em;
+  }
+  
+  .faq-header-link {
+    color: white;
+    text-decoration: none;
+    font-size: 0.9em;
+    padding: 8px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .faq-header-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    color: white;
   }
   
   #message-length-warning {
@@ -556,93 +715,160 @@
   @media (max-width: 720px) {
     .container {
       max-width: 100%;
-      padding: 1rem;
+      padding: 4px;
+      border-radius: 0;
     }
+    
+    .form-header {
+      padding: 8px 0;
+    }
+    
     .form-header-inner {
-      max-width: 100%;
-      padding: 18px 1rem 18px 1rem;
-      font-size: 1.3rem;
+      font-size: 1.1em;
+      padding: 8px 12px;
     }
+    
     .form-title {
-      font-size: 0.98em;
-      margin-bottom: 18px;
+      font-size: 0.95em;
+      margin-bottom: 16px;
+      padding: 0 8px;
     }
+    
     .form-container {
-      padding: 14px;
-      margin: 10px 0;
+      padding: 0 8px;
     }
+    
     .form-group {
-      flex-direction: column;
-      margin-top: 18px;
-      margin-bottom: 14px;
-      align-items: stretch;
+      margin-bottom: 16px;
     }
+    
     .form-label {
-      flex: none;
-      padding-right: 0;
-      padding-top: 0;
+      font-size: 0.9em;
       margin-bottom: 6px;
-      font-size: 0.98em;
     }
+    
+    .required {
+      font-size: 0.75em;
+      padding: 2px 6px;
+    }
+    
     .form-input,
     .form-select,
     .textarea {
-      flex: none;
-      width: 100%;
-      font-size: 1em;
-      min-width: 0;
+      font-size: 0.9em;
+      padding: 8px 10px;
     }
-    .textarea {
-      height: 100px;
-    }
+    
     .radio-group,
     .checkbox-group {
-      flex: none;
-      width: 100%;
+      gap: 8px;
     }
+    
     .radio-label,
     .checkbox-label {
-      font-size: 0.98em;
-      min-height: 28px;
-      padding: 4px 0;
-    }
-    .button-group {
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 18px;
-      margin-bottom: 18px;
-    }
-    .button {
-      min-width: 0;
-      width: 100%;
-      padding: 14px 0;
-      font-size: 1em;
-      height: auto;
-    }
-    .confirmation-container {
-      padding: 0;
-    }
-    .confirmation-label,
-    .confirmation-value {
-      padding-left: 10px;
-      padding-right: 10px;
-      font-size: 0.98em;
-    }
-    .confirmation-item {
-      padding: 12px 0;
-      font-size: 0.98em;
-    }
-    .completion-title,
-    .completion-message {
-      font-size: 1em;
-      margin-bottom: 18px;
-    }
-    #message-length-warning,
-    .error-message-field {
-      left: 0;
-      right: 0;
-      max-width: 100%;
-      font-size: 0.92em;
+      font-size: 0.85em;
       padding: 6px 8px;
+      min-height: 32px;
+    }
+    
+    .radio-label input,
+    .checkbox-label input {
+      margin-right: 6px;
+    }
+    
+    .button-group {
+      margin-top: 24px;
+      padding: 0 8px;
+    }
+    
+    .button {
+      font-size: 0.9em;
+      padding: 12px 20px;
+      min-height: 44px;
+    }
+    
+    .button-content {
+      gap: 8px;
+    }
+    
+    .loading-spinner {
+      width: 16px;
+      height: 16px;
+    }
+    
+    /* 確認画面のレスポンシブ対応 */
+    .confirmation-container {
+      padding: 0 8px;
+    }
+    
+    .confirmation-item {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 8px 0;
+    }
+    
+    .confirmation-label {
+      font-size: 0.85em;
+      margin-bottom: 4px;
+      width: 100%;
+    }
+    
+    .confirmation-value {
+      font-size: 0.9em;
+      width: 100%;
+      word-break: break-all;
+    }
+    
+    /* FAQのレスポンシブ対応 */
+    .related-faqs-container {
+      margin: 20px 8px;
+      padding: 15px;
+    }
+    
+    .faq-title {
+      font-size: 1.1em;
+    }
+    
+    .faq-subtitle {
+      font-size: 0.85em;
+    }
+    
+    .faq-item {
+      padding: 12px;
+      margin-bottom: 15px;
+    }
+    
+    .faq-question,
+    .faq-answer {
+      font-size: 0.85em;
+      line-height: 1.4;
+    }
+    
+    .faq-icon {
+      min-width: 18px;
+      margin-right: 6px;
+    }
+    
+    .faq-note {
+      padding: 8px;
+    }
+    
+    .faq-note p {
+      font-size: 0.8em;
+    }
+    
+    /* 完了画面のレスポンシブ対応 */
+    .completion-container {
+      padding: 30px 20px;
+    }
+    
+    .completion-title {
+      font-size: 1.2em;
+      margin-bottom: 15px;
+    }
+    
+    .completion-message {
+      font-size: 0.9em;
+      margin-bottom: 25px;
     }
   }

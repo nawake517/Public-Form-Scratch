@@ -240,17 +240,82 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // 確認画面のUIを更新
-    const updateConfirmationUI = () => {
+    const updateConfirmationUI = async () => {
         document.getElementById('confirm-name').textContent = formData.name;
         document.getElementById('confirm-email').textContent = formData.email;
         document.getElementById('confirm-service').textContent = formData.service;
         document.getElementById('confirm-category').textContent = formData.category;
         document.getElementById('confirm-plans').textContent = formData.plans.join('・') || 'なし';
         document.getElementById('confirm-message').textContent = formData.message;
+
+        // FAQ機能を動的にインポート
+        try {
+            const { findRelatedFAQs, escapeHtml } = await import('./faq/faq-data.js');
+            
+            // 関連するFAQを検索して表示
+            const relatedFAQs = findRelatedFAQs(formData.message, formData.service);
+            const faqContainer = document.getElementById('related-faqs');
+            
+            if (relatedFAQs && relatedFAQs.length > 0) {
+                faqContainer.innerHTML = `
+                    <div class="faq-section">
+                        <h3 class="faq-title">関連するよくある質問</h3>
+                        <p class="faq-subtitle">入力内容に応じてよくある質問を自動提案しています。お問い合わせ前の早期解決にお役立てください。</p>
+                        <div class="faq-list">
+                            ${relatedFAQs.map(faq => `
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        <span class="faq-icon">Q.</span>
+                                        ${escapeHtml(faq.question)}
+                                    </div>
+                                    <div class="faq-answer">
+                                        <span class="faq-icon">A.</span>
+                                        ${escapeHtml(faq.answer)}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="faq-note">
+                            <p>※ 上記の質問で解決しない場合は、このまま送信をお願いいたします。</p>
+                            <p><a href="./faq/" target="_blank" rel="noopener noreferrer" class="faq-all-link">すべてのよくある質問を見る</a></p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                faqContainer.innerHTML = `
+                    <div class="faq-section">
+                        <h3 class="faq-title">関連するよくある質問</h3>
+                        <p class="faq-subtitle">入力内容に応じたよくある質問が見つかりませんでした。お手数ですが、このまま送信をお願いいたします。</p>
+                        <div class="faq-note">
+                            <p>※ FAQページの内容が不十分で、ご不便をおかけしております。改善の参考にさせていただきます。</p>
+                            <p><a href="./faq/" target="_blank" rel="noopener noreferrer" class="faq-all-link">すべてのよくある質問を見る</a></p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // 確実に表示する
+            faqContainer.style.display = 'block';
+            
+        } catch (error) {
+            console.error('FAQ機能の読み込みに失敗しました:', error);
+            // FAQ機能が読み込めない場合でも、基本的なメッセージを表示
+            const faqContainer = document.getElementById('related-faqs');
+            faqContainer.innerHTML = `
+                <div class="faq-section">
+                    <h3 class="faq-title">💡 よくある質問について</h3>
+                    <p class="faq-subtitle">よくある質問ページもご用意しております。お問い合わせ前にご確認いただけます。</p>
+                    <div class="faq-note">
+                        <p><a href="./faq/" target="_blank" rel="noopener noreferrer" class="faq-all-link">すべてのよくある質問を見る</a></p>
+                    </div>
+                </div>
+            `;
+            faqContainer.style.display = 'block';
+        }
     };
 
     // ステップ表示を切り替える
-    const showStep = (stepName) => {
+    const showStep = async (stepName) => {
         formStepInput.classList.add('hidden');
         formStepConfirm.classList.add('hidden');
         formStepComplete.classList.add('hidden');
@@ -260,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
             formStepInput.classList.remove('hidden');
         } else if (stepName === 'confirm') {
             formStepConfirm.classList.remove('hidden');
-            updateConfirmationUI();
+            await updateConfirmationUI();
         } else if (stepName === 'complete') {
             formStepComplete.classList.remove('hidden');
         }
@@ -378,7 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 確認画面へ進むボタン
-    confirmButton.addEventListener('click', () => {
+    confirmButton.addEventListener('click', async () => {
         if (!isFormInitialized) {
             displayGlobalMessage('フォームの初期化に失敗しています。ページを再読み込みしてください。', 'error', false);
             return;
@@ -394,7 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         if (validateInputForm()) {
-            showStep('confirm');
+            await showStep('confirm');
         }
     });
 
