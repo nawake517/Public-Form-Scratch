@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header class="form-header">
+        <div class="form-header-inner">お問い合わせフォーム</div>
+    </header>
     <main class="container">
         <div id="form-global-message" class="messages"></div>
 
@@ -68,6 +71,7 @@
                         <span class="required">必須</span>
                     </label>
                     <textarea class="textarea" name="message" maxLength="100" placeholder="お問い合わせ内容をご記入ください。"></textarea>
+                    <div id="message-length-warning" class="error-message-field" style="display:none;"></div>
                     <div class="error-message-field" data-field="message"></div>
                 </div>
             </div>

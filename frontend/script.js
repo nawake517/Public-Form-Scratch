@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
             submitButton.disabled = false;
         } catch (error) {
             console.error('Error fetching CSRF token:', error);
-            displayGlobalMessage('セキュリティチェックに失敗しました。ページを再読み込みしてください。', 'error', false);
+            displayGlobalMessage('バックエンドサーバーとの接続が確立されていません。ページを再読み込みしてください。', 'error', false);
             confirmButton.disabled = true;
             submitButton.disabled = true;
             isFormInitialized = false;
@@ -364,6 +364,18 @@ document.addEventListener('DOMContentLoaded', () => {
     serviceSelect.addEventListener('focus', () => clearFieldError('service'));
     messageTextarea.addEventListener('focus', () => clearFieldError('message'));
 
+    const messageLengthWarning = document.getElementById('message-length-warning');
+    messageTextarea.addEventListener('input', (e) => {
+        if (e.target.value.length >= 101) {
+            messageLengthWarning.textContent = '100文字以内でお願いいたします';
+            messageLengthWarning.style.display = 'block';
+            messageLengthWarning.classList.add('visible');
+        } else {
+            messageLengthWarning.textContent = '';
+            messageLengthWarning.style.display = 'none';
+            messageLengthWarning.classList.remove('visible');
+        }
+    });
 
     // 確認画面へ進むボタン
     confirmButton.addEventListener('click', () => {
@@ -404,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (!csrfToken) {
             console.error('No CSRF token available');
-            displayGlobalMessage('セキュリティチェックに失敗しました。ページを再読み込みしてください。', 'error', false);
+            displayGlobalMessage('バックエンドサーバーとの接続が確立されていません。ページを再読み込みしてください。', 'error', false);
             return;
         }
 
