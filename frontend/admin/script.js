@@ -86,15 +86,15 @@ function showModal(inquiry) {
     const modalDetail = document.getElementById('modal-detail');
     modalDetail.innerHTML = `
         <h2>問い合わせ詳細</h2>
-        <table style="width:100%;border-collapse:collapse;">
-            <tr><th style="text-align:left;width:30%;padding:4px 8px;">ID</th><td style="padding:4px 8px;">${escapeHtml(inquiry.id)}</td></tr>
-            <tr><th style="text-align:left;padding:4px 8px;">氏名</th><td style="padding:4px 8px;">${escapeHtml(inquiry.name)}</td></tr>
-            <tr><th style="text-align:left;padding:4px 8px;">メールアドレス</th><td style="padding:4px 8px;">${escapeHtml(inquiry.email)}</td></tr>
-            <tr><th style="text-align:left;padding:4px 8px;">サービス</th><td style="padding:4px 8px;">${escapeHtml(inquiry.service)}</td></tr>
-            <tr><th style="text-align:left;padding:4px 8px;">カテゴリー</th><td style="padding:4px 8px;">${escapeHtml(inquiry.category)}</td></tr>
-            <tr><th style="text-align:left;padding:4px 8px;">プラン</th><td style="padding:4px 8px;">${(() => { try { return inquiry.plans ? JSON.parse(inquiry.plans).join('・') : ''; } catch (e) { return inquiry.plans || ''; } })()}</td></tr>
-            <tr><th style="text-align:left;padding:4px 8px;">お問い合わせ内容</th><td style="padding:4px 8px;white-space:pre-wrap;">${escapeHtml(inquiry.message)}</td></tr>
-            <tr><th style="text-align:left;padding:4px 8px;">受付日時</th><td style="padding:4px 8px;">${formatDate(inquiry.created_at)}</td></tr>
+        <table>
+            <tr><th>ID</th><td>${escapeHtml(inquiry.id)}</td></tr>
+            <tr><th>氏名</th><td>${escapeHtml(inquiry.name)}</td></tr>
+            <tr><th>メールアドレス</th><td>${escapeHtml(inquiry.email)}</td></tr>
+            <tr><th>サービス</th><td>${escapeHtml(inquiry.service)}</td></tr>
+            <tr><th>カテゴリー</th><td>${escapeHtml(inquiry.category)}</td></tr>
+            <tr><th>プラン</th><td>${(() => { try { return inquiry.plans ? JSON.parse(inquiry.plans).join('・') : ''; } catch (e) { return inquiry.plans || ''; } })()}</td></tr>
+            <tr><th>お問い合わせ内容</th><td style="white-space:pre-wrap;">${escapeHtml(inquiry.message)}</td></tr>
+            <tr><th>受付日時</th><td>${formatDate(inquiry.created_at)}</td></tr>
         </table>
     `;
     modal.style.display = 'flex';
