@@ -4,7 +4,7 @@ FAQ自動提案機能を備えた、お問い合わせフォームの、スク�
 
 ## アクセスURL
 
-ユーザー画面：[https://contact2.cypass.net](https://contact2.cypass.net)
+ユーザー画面：[https://contact2.cypass.net](https://contact2.cypass.net)  
 管理画面（認証なし）：[https://contact2.cypass.net/admin](https://contact2.cypass.net/admin)
 
 ## アーキテクチャ図
